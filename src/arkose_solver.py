@@ -62,6 +62,8 @@ class Capsolver(ArkoseSolver):
             except Exception as e:
                 logger.warning(f"fail to create arkose task retry: {i}")
 
+            time.sleep(5)
+
         if task_id:
             url = "https://api.capsolver.com/getTaskResult"
             status = ""
