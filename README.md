@@ -48,7 +48,8 @@ pip install -r requirements.txt
 - `emailImapPort`: 选填，你的邮箱的imap服务器端口，一般可以在你邮箱服务的提供方的文档中找到。
 - `capsolverKey`: 必填，[capsolver](https://dashboard.capsolver.com/passport/register?inviteCode=DcXKh_eA522p)
   的key，用于获取arkose token
-- `yesClientKey`: 必填，[yescaptcha](https://yescaptcha.com/i/oFmkQz)的clientKey，用于过邮箱验证的cf
+- `yesClientKey`: 必填，[yescaptcha](https://yescaptcha.com/i/oFmkQz)（如果你还没有注册，或者低于vip4，可以通过这个链接注册，
+  你可以直接获得vip4）的clientKey，用于过邮箱验证的cf。
 - `cfSolverProxy`:
   必填。过cf时用的代理。格式和要求参考[文档](https://yescaptcha.atlassian.net/wiki/spaces/YESCAPTCHA/pages/86409217/CloudFlareTask+CloudFlare5)
   我在调试脚本的时候用的是[okeyproxy](https://www.okeyproxy.com?ref=y6lg9s)。
