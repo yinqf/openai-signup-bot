@@ -1,8 +1,10 @@
+import random
 import secrets
 import string
 import threading
 import time
 import uuid
+from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 
 from curl_cffi import requests, CurlHttpVersion
@@ -306,12 +308,19 @@ class Signup:
 
     def _create_account(self, access_token, arkose):
         url = "https://api.openai.com/dashboard/onboarding/create_account"
+
+        random_year = random.randint(1980, 2000)
+        random_month = random.randint(1, 12)
+        random_day = random.randint(1, 28)
+
+        random_birthdate = datetime(random_year, random_month, random_day).strftime("%Y-%m-%d")
+
         json = {
             "app": "api",
-            "name": "vvv",
+            "name": ''.join(random.choices(string.ascii_lowercase, k=3)),
             "picture": "https://s.gravatar.com/avatar/eb9cd315d89e3fb42733f8cbd94a1950?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fg2.png",
             "arkose_token": arkose,
-            "birthdate": "2001-02-11",
+            "birthdate": random_birthdate,
         }
 
         headers = {

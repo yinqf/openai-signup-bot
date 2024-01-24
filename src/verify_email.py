@@ -59,7 +59,12 @@ def _click_verify_link(link):
 
     if error_id == 0:
         logger.debug(f"success verify email link {link}")
-        return
+        try:
+            cf_clearance = resp_json["solution"]["cookies"]["cf_clearance"]
+            if cf_clearance:
+                return cf_clearance
+        except Exception as e:
+            raise Exception(f"failed to get cf_clearance from {resp_json}")
 
     raise Exception(f"failed to verify email link {link} error id {error_id} task id {task_id}")
 
