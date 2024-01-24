@@ -7,14 +7,15 @@ from curl_cffi import requests
 from loguru import logger
 
 import config
-from config import proxy, yes_client_key, cf_solver_proxy, email_worker_num
+from config import yes_client_key, email_worker_num
 from pool_manager import ThreadPoolManager
+from proxy import get_cf_solver_proxy, get_proxy
 
 pm = ThreadPoolManager(email_worker_num)
 
 
 def _click_verify_link(link):
-    client = requests.Session(proxies={"http": proxy, "https": proxy})
+    client = requests.Session(proxies={"http": get_proxy(), "https": get_proxy()})
 
     url = "https://api.yescaptcha.com/createTask"
 
@@ -23,7 +24,7 @@ def _click_verify_link(link):
         "task": {
             "type": "CloudFlareTaskS2",
             "websiteURL": link,
-            "proxy": cf_solver_proxy,
+            "proxy": get_cf_solver_proxy(),
             "waitLoad": True
         },
         "softID": 31275
@@ -31,7 +32,7 @@ def _click_verify_link(link):
 
     task_id = None
     for i in range(3):
-        resp = client.post(url, json=request)
+        resp = client.post(url, json=request, proxies={"http": get_proxy(), "https": get_proxy()})
         resp_json = resp.json()
         task_id = resp_json["taskId"]
         if task_id:
@@ -46,7 +47,8 @@ def _click_verify_link(link):
     while True:
         task_url = 'https://api.yescaptcha.com/getTaskResult'
         resp = client.post(task_url,
-                           json={"clientKey": yes_client_key, "taskId": task_id})
+                           json={"clientKey": yes_client_key, "taskId": task_id},
+                           proxies={"http": get_proxy(), "https": get_proxy()})
         resp_json = resp.json()
         if resp_json["status"] == "processing":
             time.sleep(5)

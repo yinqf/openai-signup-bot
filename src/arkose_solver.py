@@ -4,15 +4,16 @@ from abc import abstractmethod
 
 from curl_cffi import requests, CurlHttpVersion
 
-from config import capsolver_key, proxy
+from config import capsolver_key
 from log import logger
+from proxy import get_proxy
 
 
 class ArkoseSolver(object):
 
     def __init__(self):
         self.session = requests.Session(
-            impersonate="chrome99_android", proxies={"http": proxy, "https": proxy},
+            impersonate="chrome99_android", proxies={"http": get_proxy(), "https": get_proxy()},
             http_version=CurlHttpVersion.V1_1,
             timeout=60
         )
@@ -53,7 +54,8 @@ class Capsolver(ArkoseSolver):
 
         for i in range(3):
             try:
-                resp = self.session.post(url, data=payload, timeout=10)
+                resp = self.session.post(url, data=payload, timeout=10,
+                                         proxies={"http": get_proxy(), "https": get_proxy()})
                 resp_json = resp.json()
                 task_id = resp_json["taskId"]
                 break
@@ -71,7 +73,7 @@ class Capsolver(ArkoseSolver):
                 task = self.session.post(url, json={
                     "clientKey": capsolver_key,
                     "taskId": task_id
-                })
+                }, proxies={"http": get_proxy(), "https": get_proxy()}, )
 
                 task_json = task.json()
 

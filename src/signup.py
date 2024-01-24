@@ -11,9 +11,10 @@ from curl_cffi import requests, CurlHttpVersion
 from func_timeout import func_timeout
 
 from arkose_solver import Capsolver
-from config import proxy, domain
+from config import domain
 from log import logger, log_context
 from pool_manager import ThreadPoolManager
+from proxy import get_proxy
 
 csrf_url = "https://chat.openai.com/api/auth/csrf"
 prompt_login_url = "https://chat.openai.com/api/auth/signin/auth0?prompt=login&screen_hint=signup"
@@ -28,7 +29,7 @@ check_password_url = f"{auth_url}/u/signup/password?state="
 class Signup:
     def __init__(self):
         self.session = requests.Session(
-            impersonate="chrome99_android", proxies={"http": proxy, "https": proxy},
+            impersonate="chrome99_android", proxies={"http": get_proxy(), "https": get_proxy()},
             http_version=CurlHttpVersion.V1_1,
             timeout=60
         )
@@ -47,6 +48,7 @@ class Signup:
                 },
                 allow_redirects=False,
                 timeout=30,
+                proxies={"http": get_proxy(), "https": get_proxy()},
             )
             if response.status_code == 200:
                 logger.debug(f"success to get csrf")
@@ -66,7 +68,8 @@ class Signup:
         retry = 5
         for i in range(retry):
             response = self.session.post(
-                prompt_login_url, data=data, headers=headers, allow_redirects=False
+                prompt_login_url, data=data, headers=headers, allow_redirects=False,
+                proxies={"http": get_proxy(), "https": get_proxy()},
             )
             if response.status_code == 200:
                 logger.debug(f"success to get authorized url")
@@ -87,7 +90,8 @@ class Signup:
         retry = 5
         for i in range(retry):
             try:
-                response = self.session.get(authorized_url, headers=headers, allow_redirects=False)
+                response = self.session.get(authorized_url, headers=headers, allow_redirects=False,
+                                            proxies={"http": get_proxy(), "https": get_proxy()}, )
                 if response.status_code == 302:
                     location = response.headers.get("Location", "")
                     parsed_url = urlparse(location)
@@ -114,13 +118,15 @@ class Signup:
         for i in range(retry):
             try:
                 response = self.session.post(check_identifier_url + state, data=form_param, headers=headers,
-                                             allow_redirects=False)
+                                             allow_redirects=False,
+                                             proxies={"http": get_proxy(), "https": get_proxy()})
                 if response.status_code == 302:
                     location = response.headers.get("Location", "")
                     response = self.session.get(
                         auth_url + location,
                         headers={"User-Agent": UserAgent},
                         allow_redirects=False,
+                        proxies={"http": get_proxy(), "https": get_proxy()},
                     )
                     if response.status_code == 200:
                         logger.debug(f"success to check identifier {identifier}")
@@ -160,7 +166,8 @@ class Signup:
                 }
 
                 response = self.session.post(check_password_url + state, data=form_param, headers=headers,
-                                             allow_redirects=True)
+                                             allow_redirects=True,
+                                             proxies={"http": get_proxy(), "https": get_proxy()})
 
                 if response.status_code == 200:
                     logger.debug(f"success to gen and check identifier {identifier} password {password}")
@@ -200,7 +207,8 @@ class Signup:
         for i in range(retry):
 
             try:
-                response = self.session.get(url, params=param, headers=headers, allow_redirects=False)
+                response = self.session.get(url, params=param, headers=headers, allow_redirects=False,
+                                            proxies={"http": get_proxy(), "https": get_proxy()})
 
                 if response.status_code == 302:
                     location = response.headers.get("Location", "")
@@ -216,7 +224,8 @@ class Signup:
                     }
 
                     token_url = "https://auth0.openai.com/oauth/token"
-                    response = self.session.post(token_url, json=json, headers=headers, allow_redirects=False)
+                    response = self.session.post(token_url, json=json, headers=headers, allow_redirects=False,
+                                                 proxies={"http": get_proxy(), "https": get_proxy()})
 
                     resp_json = response.json()
                     access_token = resp_json["access_token"]
@@ -241,7 +250,8 @@ class Signup:
         retry = 3
 
         for i in range(retry):
-            response = self.session.post(url, headers=headers, allow_redirects=False)
+            response = self.session.post(url, headers=headers, allow_redirects=False,
+                                         proxies={"http": get_proxy(), "https": get_proxy()})
             if response.status_code == 200:
                 return response.json()
             time.sleep(5)
@@ -330,7 +340,8 @@ class Signup:
 
         retry = 3
         for i in range(retry):
-            resp = self.session.post(url, json=json, headers=headers, allow_redirects=False)
+            resp = self.session.post(url, json=json, headers=headers, allow_redirects=False,
+                                     proxies={"http": get_proxy(), "https": get_proxy()})
             if resp.status_code == 200:
                 resp_json = resp.json()
                 logger.debug(f"account created resp {resp_json}")
@@ -348,7 +359,8 @@ class Signup:
         }
 
         for i in range(3):
-            resp = self.session.get(url, headers=headers, allow_redirects=False)
+            resp = self.session.get(url, headers=headers, allow_redirects=False,
+                                    proxies={"http": get_proxy(), "https": get_proxy()})
             if resp.status_code == 200:
                 resp_json = resp.json()
                 logger.debug(f"success to get credit grants {resp_json}")
