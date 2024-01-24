@@ -357,10 +357,14 @@ class Signup:
 
 
 def main(sm):
-    log_context.set(trace_id=str(uuid.uuid4()))
     s = Signup()
+
+    def do_sign_up():
+        log_context.set(trace_id=str(uuid.uuid4()))
+        s.signup()
+
     try:
-        func_timeout(5 * 60, s.signup)
+        func_timeout(5 * 60, do_sign_up)
         sm.increment_success()
     except BaseException as e:
         sm.increment_failure()
