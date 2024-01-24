@@ -61,6 +61,12 @@ pip install -r requirements.txt
 python src/main.py
 ```
 
+如果不是第一次使用，在每次使用之前可以先更新一下代码。
+
+```bash
+git pull
+```
+
 注册成功的账号会出现在`data/accounts.txt`中。如果账号被授权了额度。会保存到`data/credit.txt`中。
 
 ## 交流沟通
