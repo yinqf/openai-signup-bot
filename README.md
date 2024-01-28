@@ -70,6 +70,9 @@ git pull
 
 注册成功的账号会出现在`data/accounts.txt`中。如果账号被授权了额度。会保存到`data/credit.txt`中。
 
+## 常见问题汇总
+https://github.com/MagicalMadoka/openai-signup-bot/issues/6
+
 ## 交流沟通
 
 - 本项目相关的讨论请提issue。先点star哦。
