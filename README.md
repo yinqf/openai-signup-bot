@@ -76,6 +76,6 @@ https://github.com/MagicalMadoka/openai-signup-bot/issues/6
 ## 交流沟通
 
 - 本项目相关的讨论请提issue。先点star哦。
-- 其他技术交流: [Telegram](https://t.me/+-mQhGgbruexmNjA1)
+- 其他技术交流: [Telegram](https://t.me/+shEEyNIEe55lN2Rl)
   请注意，这是其他技术交流群，不是项目部署群，也不是答疑群。任何和此项目有关的问题，请提issue，请提issue，请提issue。提之前先点star。
 
