@@ -44,8 +44,8 @@ class Capsolver(ArkoseSolver):
             "task": {
                 "type": "FunCaptchaTaskProxyLess",
                 "websitePublicKey": "0655BC92-82E1-43D9-B32E-9DF9B01AF50C",
-                "websiteURL": "https://chat.openai.com",
-                "data": json.dumps({"blob": arkose_data_payload})
+                "websiteURL": "https://plantform.openai.com",
+                "data": json.dumps({"auth": "Bearer " + arkose_data_payload})
             }
         }
         )

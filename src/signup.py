@@ -27,7 +27,7 @@ check_password_url = f"{auth_url}/u/signup/password?state="
 
 
 class Signup:
-    def __init__(self,sm):
+    def __init__(self, sm):
         self.session = requests.Session(
             impersonate="chrome99_android", proxies={"http": get_proxy(), "https": get_proxy()},
             http_version=CurlHttpVersion.V1_1,
@@ -282,9 +282,9 @@ class Signup:
         arkose_retry = 3
         for i in range(arkose_retry):
             try:
-                account_status = self._login(access_token)
-                arkose_data_payload = account_status["arkose_data_payload"]
-                arkose = self.arkose_solver.get_arkose_token(arkose_data_payload)
+                # account_status = self._login(access_token)
+                # arkose_data_payload = account_status["arkose_data_payload"]
+                arkose = self.arkose_solver.get_arkose_token(access_token)
                 if arkose:
                     break
             except Exception as e:

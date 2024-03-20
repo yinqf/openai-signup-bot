@@ -21,10 +21,13 @@ def main():
     email_worker = threading.Thread(target=verify_email, args=(sm,))
     email_worker.start()
 
+    while not sm.is_email_worker_ready():
+        time.sleep(1)
+
     sign_worker = threading.Thread(target=sign_up_worker, args=(sm,))
     sign_worker.start()
 
-    email_worker.join()
+    # email_worker.join()
     sign_worker.join()
 
 

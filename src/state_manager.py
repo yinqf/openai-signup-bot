@@ -14,6 +14,7 @@ class GlobalStateManager:
         self.max_success = max_success_accounts
         self.max_failure = max_failure_accounts
         self._should_stop = False
+        self._email_worker_ready = False
 
     def increment_success(self):
         with self.lock:
@@ -41,3 +42,11 @@ class GlobalStateManager:
 
         with self.lock:
             return self._should_stop
+
+    def set_email_worker_ready(self):
+        with self.lock:
+            self._email_worker_ready = True
+
+    def is_email_worker_ready(self):
+        with self.lock:
+            return self._email_worker_ready

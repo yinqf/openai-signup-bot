@@ -101,6 +101,7 @@ def verify_email(sm):
         raise e
 
     logger.debug("start to monitor openai verify email")
+    sm.set_email_worker_ready()
 
     def get_html_part(msg):
         if msg.is_multipart():
