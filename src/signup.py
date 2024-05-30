@@ -309,10 +309,10 @@ class Signup:
         if credit and credit['total_granted'] > 0:
             logger.info(f"account: {identifier} has credit: {credit['total_granted']}")
             self.write_to_file(write_lock, "./data/credit.txt",
-                               f"{identifier}----{password}----{sess}----{refresh_token}\n")
+                               f"{identifier}----{password}----{sess}----{access_token}----{refresh_token}\n")
         else:
             self.write_to_file(write_lock, "./data/account.txt",
-                               f"{identifier}----{password}----{sess}----{refresh_token}\n")
+                               f"{identifier}----{password}----{sess}----{access_token}----{refresh_token}\n")
         self.session.close()
 
     def write_to_file(self, lock, file_name, text):
